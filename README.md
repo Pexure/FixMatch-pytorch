@@ -26,7 +26,7 @@ This code is only available in FixMatch (RandAugment).
 ## Usage
 
 ### Train
-Train the model by 4000 labeled data of CIFAR-10 dataset: (default root: `./data`)
+Train the model by 4000 labeled data of CIFAR-10 dataset: (default root: `./data/cifar`)
 
 ```
 python train.py --dataset cifar10 --num-labeled 4000 --arch wideresnet --batch-size 64 --lr 0.03 --expand-labels --seed 5 --out results/cifar10@4000.5
