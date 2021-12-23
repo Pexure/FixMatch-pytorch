@@ -79,7 +79,7 @@ def get_args():
     parser.add_argument("--expand-labels", action="store_true",
                         help="expand labels to fit eval steps")
     parser.add_argument('--arch', default='wideresnet', type=str,
-                        choices=['wideresnet', 'resnext'],
+                        choices=['wideresnet', 'resnext', 'preresnet'],
                         help='dataset name')
     parser.add_argument('--total-steps', default=2**20, type=int,
                         help='number of total steps to run')
@@ -146,6 +146,9 @@ def main():
                                          depth=args.model_depth,
                                          width=args.model_width,
                                          num_classes=args.num_classes)
+        elif args.arch == 'preresnet':
+            import models.preresnet as models
+            model = models.PreResNet(depth=18, num_classes=args.num_classes)
         logger.info("Total params: {:.2f}M".format(
             sum(p.numel() for p in model.parameters())/1e6))
         return model
@@ -203,6 +206,8 @@ def main():
             args.model_cardinality = 8
             args.model_depth = 29
             args.model_width = 64
+        elif args.arch == 'preresnet':
+            args.model_depth = 18
 
     if args.local_rank not in [-1, 0]:
         torch.distributed.barrier()
