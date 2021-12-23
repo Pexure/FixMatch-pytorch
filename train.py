@@ -65,7 +65,7 @@ def de_interleave(x, size):
     return x.reshape([size, -1] + s[1:]).transpose(0, 1).reshape([-1] + s[1:])
 
 
-def main():
+def get_args():
     parser = argparse.ArgumentParser(description='PyTorch FixMatch Training')
     parser.add_argument('--gpu-id', default='0', type=int,
                         help='id(s) for CUDA_VISIBLE_DEVICES')
@@ -119,13 +119,18 @@ def main():
                         help="use 16-bit (mixed) precision through NVIDIA apex AMP")
     parser.add_argument("--opt_level", type=str, default="O1",
                         help="apex AMP optimization level selected in ['O0', 'O1', 'O2', and 'O3']."
-                        "See details at https://nvidia.github.io/apex/amp.html")
+                             "See details at https://nvidia.github.io/apex/amp.html")
     parser.add_argument("--local_rank", type=int, default=-1,
                         help="For distributed training: local_rank")
     parser.add_argument('--no-progress', action='store_true',
                         help="don't use progress bar")
 
     args = parser.parse_args()
+    return args
+
+
+def main():
+    args = get_args()
     global best_acc
 
     def create_model(args):
