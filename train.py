@@ -74,6 +74,8 @@ def get_args():
     parser.add_argument('--dataset', default='cifar10', type=str,
                         choices=['cifar10', 'cifar100'],
                         help='dataset name')
+    parser.add_argument('--root', default='./data/cifar', type=str,
+                        help='dataset root')
     parser.add_argument('--num-labeled', type=int, default=4000,
                         help='number of labeled data')
     parser.add_argument("--expand-labels", action="store_true",
@@ -212,8 +214,10 @@ def main():
     if args.local_rank not in [-1, 0]:
         torch.distributed.barrier()
 
+    # labeled_dataset, unlabeled_dataset, test_dataset = DATASET_GETTERS[args.dataset](
+    #     args, './data')
     labeled_dataset, unlabeled_dataset, test_dataset = DATASET_GETTERS[args.dataset](
-        args, './data')
+        args, args.root)
 
     if args.local_rank == 0:
         torch.distributed.barrier()
